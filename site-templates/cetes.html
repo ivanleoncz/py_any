@@ -5,6 +5,44 @@
     <title>CETES</title>
 </head>
 <body>
-    <h3> Let's calculate! </h3>
+    <h3> CETES Calculation </h3>
+    <div>
+        <form method="post" action="/apps/cetes/">
+            {% csrf_token %}
+            <label for="investment">Amount to invest: </label>
+            <input id="investment" type="number" name="investment"><br>
+            <p> Term type (investment time):
+            <select name="term" id="term">
+              <option value="28">28 days</option>
+              <option value="91">91 days</option>
+              <option value="182">182 days</option>
+              <option value="364">364 days</option>
+            </select><br><br>
+
+            <label for="reinvest">Reinvest for how long, depending on term (0 for reinvest): </label>
+            <input id="reinvest" type="number" name="reinvest" min="0"><br><br>
+            <input type="submit">
+        </form>
+    </div>
+    <div>
+        {% if projection %}
+            <table border="1">
+                <tr>
+                    <th>Year</th>
+                    <th>Gain</th>
+                </tr>
+                {% for year, value in projection.items %}
+                <tr>
+                    <td>
+                        {{ year }}
+                    </td>
+                    <td>
+                        {{ value }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% endif%}
+    </div>
 </body>
 </html>
