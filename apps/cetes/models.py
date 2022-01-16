@@ -2,10 +2,10 @@ from django.db import models
 
 
 class AuctionMonth(models.Model):
-    days = models.PositiveIntegerField()
+    days = models.PositiveIntegerField(default=28)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     rate = models.DecimalField(max_digits=4, decimal_places=2)
-    date = models.DateField()
+    date = models.DateField(unique=True)
     created = models.DateTimeField()
 
     class Meta:
@@ -14,10 +14,10 @@ class AuctionMonth(models.Model):
 
 
 class AuctionTrimester(models.Model):
-    days = models.PositiveIntegerField()
+    days = models.PositiveIntegerField(default=91)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     rate = models.DecimalField(max_digits=4, decimal_places=2)
-    date = models.DateField()
+    date = models.DateField(unique=True)
     created = models.DateTimeField()
 
     class Meta:
@@ -26,10 +26,10 @@ class AuctionTrimester(models.Model):
 
 
 class AuctionSemester(models.Model):
-    days = models.PositiveIntegerField()
+    days = models.PositiveIntegerField(default=182)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     rate = models.DecimalField(max_digits=4, decimal_places=2)
-    date = models.DateField()
+    date = models.DateField(unique=True)
     created = models.DateTimeField()
 
     class Meta:
@@ -38,10 +38,10 @@ class AuctionSemester(models.Model):
 
 
 class AuctionYear(models.Model):
-    days = models.PositiveIntegerField()
+    days = models.PositiveIntegerField(default=364)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     rate = models.DecimalField(max_digits=4, decimal_places=2)
-    date = models.DateField()
+    date = models.DateField(unique=True)
     created = models.DateTimeField()
 
     class Meta:
