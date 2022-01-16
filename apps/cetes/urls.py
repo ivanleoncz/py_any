@@ -1,7 +1,7 @@
 from django.urls import path
 
-from . import views
+from .views import CetesView
 
 urlpatterns = [
-    path('cetes/', views.index, name='index')
+    path('cetes/', CetesView.as_view())
 ]
