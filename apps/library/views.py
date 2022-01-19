@@ -4,12 +4,9 @@ from django.views import generic
 from .models import Author
 
 
-class LibraryView(generic.View):
+class LibraryView(generic.TemplateView):
 
-    template = 'library.html'
-
-    def get(self, request):
-        return render(request, self.template)
+    template_name = 'library.html'
 
 
 class AuthorListView(generic.ListView):
