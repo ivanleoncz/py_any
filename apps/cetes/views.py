@@ -6,6 +6,7 @@ from .forms import CetesForm
 
 from .utils import calculate_cetes
 
+
 class CetesView(View):
 
     form_class = CetesForm
