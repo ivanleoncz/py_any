@@ -13,7 +13,7 @@ class AuthorListView(generic.ListView):
 
     model = Author
     template_name = "library/author.html"
-    queryset = Author.objects.all()
+    queryset = Author.objects.all().order_by('id')
 
 
 class AuthorDetailView(generic.DetailView):
