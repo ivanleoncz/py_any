@@ -1,18 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Author - detail</title>
-</head>
-<body>
+{% extends "library/base_library.html" %}
+
+{% block title %} Library - Author {% endblock %}
 
 {% block content %}
   <ul>
     <li> {{ author.first_name }}, {{ author.last_name }} </li>
   </ul>
-{% endblock %}
-
 <footer> <a href="{% url 'author-view' %}">Return to list of Authors.</a></footer>
-
-</body>
-</html>
+{% endblock %}

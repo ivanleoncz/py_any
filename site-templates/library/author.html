@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Author</title>
-</head>
-<body>
+{% extends "library/base_library.html" %}
+
+{% block title %} Library - Author {% endblock %}
 
 {% block content %}
   <h1>Author List</h1>
@@ -19,9 +15,5 @@
   {% else %}
     <p>There are no authors in the library.</p>
   {% endif %}
+  <footer> <a href="{% url 'library-view' %}">Return to Library Home.</a></footer>
 {% endblock %}
-
-<footer> <a href="{% url 'library-view' %}">Return to Library Home.</a></footer>
-
-</body>
-</html>

@@ -1,0 +1,8 @@
+{% extends "library/base_library.html" %}
+
+{% block title %} Library - Author {% endblock %}
+
+{% block content %}
+    <h3>Welcome to my library!</h3>
+    <a href="{% url 'author-view' %}">Authors</a>
+{% endblock %}
