@@ -4,5 +4,8 @@
 
 {% block content %}
     <h3>Welcome to my library!</h3>
-    <a href="{% url 'author-view' %}">Authors</a>
+    <ul>
+        <li><a href="{% url 'author-view' %}">Authors</a></li>
+        <li><a href="{% url 'book-view' %}">Books</a></li>
+    </ul>
 {% endblock %}
