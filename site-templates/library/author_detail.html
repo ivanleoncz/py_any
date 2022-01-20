@@ -3,8 +3,10 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-  <ul>
-    <li> {{ author.first_name }}, {{ author.last_name }} </li>
-  </ul>
+
+  <h3> {{ author.first_name }}, {{ author.last_name }} </h3>
+  <p> <b> Born:</b> {{author.date_of_birth}}</p>
+  <p> <b> Died:</b> {{author.date_of_death}}</p>
+
 <footer> <a href="{% url 'author-view' %}">Return to list of Authors.</a></footer>
 {% endblock %}
