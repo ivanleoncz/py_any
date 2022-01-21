@@ -9,5 +9,8 @@
   <p> <b> Born:</b> {{author.date_of_birth}}</p>
   <p> <b> Died:</b> {{author.date_of_death}}</p>
 
-<footer> <a href="{% url 'authors-view' %}">Return to list of Authors.</a></footer>
+<footer>
+  <button class="btn"><a href="{% url 'authors-view' %}">Return to Authors</a></button>
+</footer>
+
 {% endblock %}

@@ -18,5 +18,7 @@
   {% else %}
     <p>There are no books in the library.</p>
   {% endif %}
-  <footer> <a href="{% url 'library-view' %}">Return to Library Home.</a></footer>
+  <footer>
+    <button class="btn"><a href="{% url 'library-view' %}">Return to Library Home.</a></button>
+  </footer>
 {% endblock %}
