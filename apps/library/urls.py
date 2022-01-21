@@ -4,8 +4,8 @@ from .views import LibraryView, AuthorListView, AuthorDetailView, BookListView, 
 
 urlpatterns = [
     path('library/', LibraryView.as_view(), name="library-view"),
-    path('library/author/', AuthorListView.as_view(), name="author-view"),
-    path('library/author/<int:pk>/', AuthorDetailView.as_view(), name="author-detail"),
-    path('library/book/', BookListView.as_view(), name="book-view"),
-    path('library/book/<int:pk>/', BookDetailView.as_view(), name="book-detail"),
+    path('library/authors/', AuthorListView.as_view(), name="authors-view"),
+    path('library/authors/<int:pk>/', AuthorDetailView.as_view(), name="authors-detail"),
+    path('library/books/', BookListView.as_view(), name="books-view"),
+    path('library/books/<int:pk>/', BookDetailView.as_view(), name="books-detail"),
 ]
