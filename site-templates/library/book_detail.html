@@ -3,8 +3,9 @@
 {% block title %} Library - Book {% endblock %}
 
 {% block content %}
-
-  <h3> {{ book.title }} ({{ book.author }}) </h3>
+  <div class="page-header">
+    <h3> {{ book.title }} ({{ book.author }}) </h3>
+  </div>
   <p> <b> isbn:</b>    {{book.isbn}}</p>
   <p> <b> genre:</b>   {{book.display_genre}}</p>
   <p> <b> summary:</b> {{book.summary}}</p>

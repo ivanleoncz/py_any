@@ -3,7 +3,9 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-    <h3>Welcome to my library!</h3>
+    <div class="page-header">
+        <h1>Welcome to my Library!</h1>
+    </div>
     <ul>
         <li><a href="{% url 'author-view' %}">Authors</a></li>
         <li><a href="{% url 'book-view' %}">Books</a></li>

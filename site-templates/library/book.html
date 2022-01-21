@@ -3,7 +3,10 @@
 {% block title %} Library - Book {% endblock %}
 
 {% block content %}
-  <h1>Book List</h1>
+  <div class="page-header">
+    <h1>Books</h1>
+  </div>
+
   {% if book_list %}
   <ul>
     {% for book in book_list %}
