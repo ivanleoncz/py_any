@@ -18,7 +18,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
 class BookAdmin(admin.ModelAdmin):
     list_display = ('title', 'author', 'display_genre')
-    fields = ('title', 'author', 'isbn', 'genre', 'summary')
+    fields = ('title', 'author', 'isbn_10', 'isbn_13', 'genre', 'summary')
 
 
 class GenreAdmin(admin.ModelAdmin):
