@@ -4,12 +4,10 @@
 
 {% block content %}
 
-  {% if author_list %}
     {% for author in author_list %}
       <h3><a href="{{ author.get_absolute_url }}">{{ author.last_name }}, {{ author.first_name }}</a></h3>
+    {% empty %}
+      <p>There are no authors in the library.</p>
     {% endfor %}
-  {% else %}
-    <p>There are no authors in the library.</p>
-  {% endif %}
 
 {% endblock %}
