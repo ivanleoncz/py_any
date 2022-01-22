@@ -3,21 +3,13 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-  <div class="page-header">
-    <h1>Authors</h1>
-  </div>
+
   {% if author_list %}
-  <ul>
     {% for author in author_list %}
-      <li>
-        <a href="{{ author.get_absolute_url }}"> {{ author.id}} - {{ author.last_name }}, {{ author.first_name }} </a>
-      </li>
+      <h3><a href="{{ author.get_absolute_url }}">{{ author.last_name }}, {{ author.first_name }}</a></h3>
     {% endfor %}
-  </ul>
   {% else %}
     <p>There are no authors in the library.</p>
   {% endif %}
-  <footer>
-    <button class="btn"><a href="{% url 'library-view' %}">Return to Library Home</a></button>
-  </footer>
+
 {% endblock %}
