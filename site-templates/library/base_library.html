@@ -14,6 +14,17 @@
             crossorigin="anonymous">
 
       <title>{% block title %} {% endblock %}</title>
+      <style type="text/css">
+        li {
+            font-size: 20px;
+        }
+        p {
+            font-size: 16px;
+        }
+        #content-frame {
+            padding-left: 30px;
+        }
+      </style>
   </head>
 
   <body>
@@ -23,14 +34,14 @@
       </div>
       <div class="col-sm-2">
         {% block sidebar %}
-        <ul class="sidebar-nav">
-          <li><a href="{% url 'library-view' %}">Home</a></li>
-          <li><a href="{% url 'authors-view' %}">Authors</a></li>
-          <li><a href="{% url 'books-view' %}">Books</a></li>
-        </ul>
+        <div class="sidebar-nav list-group">
+          <a class="list-group-item list-group-item-action" href="{% url 'library-view' %}">Home</a>
+          <a class="list-group-item list-group-item-action" href="{% url 'authors-view' %}">Authors</a>
+          <a class="list-group-item list-group-item-action" href="{% url 'books-view' %}">Books</a>
+        </div>
         {% endblock %}
       </div>
-      <div class="col-sm-10 ">
+      <div id="content-frame" class="col-sm-10">
           {% block content %}{% endblock %}
       </div>
 
