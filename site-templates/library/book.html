@@ -5,7 +5,7 @@
 {% block content %}
 
     {% for book in book_list %}
-        <h3><b>{{ book.title }}</b> by {{ book.author }}</h3>
+        <h3><a href="{{ book.get_absolute_url }}" style="text-decoration:none"><b>{{ book.title }}</b></a> by {{ book.author }}</h3>
         <p>{{ book.summary|slice:200 }}<a href="{{ book.get_absolute_url }}">...see more</a></p>
     {% empty %}
         <p>There are no books in the library.</p>
