@@ -30,6 +30,7 @@ class AuthorDetailView(generic.DetailView):
 class BookListView(generic.ListView):
 
     model = Book
+    paginate_by = 5
     template_name = "library/book.html"
     queryset = Book.objects.all().order_by('id')
 
