@@ -8,4 +8,7 @@
   <p><b> isbn-13:</b> {{book.isbn_13}}</p>
   <p><b> genre:</b>   {{book.display_genre}}</p>
   <p><b> summary:</b> {{book.summary}}</p>
+  <footer>
+    <a href="{{request.META.HTTP_REFERER}}">Back</a>
+  </footer>
 {% endblock %}
