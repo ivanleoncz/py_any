@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views import generic
 
 from .models import Author, Book, Genre
@@ -21,10 +21,18 @@ class AuthorListView(generic.ListView):
     queryset = Author.objects.all().order_by('id')
 
 
-class AuthorDetailView(generic.DetailView):
+class AuthorDetailView(generic.View):
 
-    model = Author
     template_name = "library/author_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        author = get_object_or_404(Author, pk=self.kwargs["pk"])
+        books = author.books.all()
+        context = {
+            "author": author,
+            "books": books
+        }
+        return render(request, self.template_name, context)
 
 
 class BookListView(generic.ListView):
