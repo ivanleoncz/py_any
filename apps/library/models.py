@@ -35,13 +35,13 @@ class Genre(models.Model):
 
 class Book(models.Model):
     title = models.CharField(max_length=256)
-    author = models.ForeignKey('Author', on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey('Author', related_name="books", on_delete=models.SET_NULL, null=True)
     summary = models.TextField(max_length=512, help_text='Enter a brief description')
     isbn_10 = models.CharField(null=True, blank=True, max_length=13, unique=True,
                                help_text='<a href="https://www.isbn-international.org/content/what-isbn">ISBN</a>')
     isbn_13 = models.CharField(null=True, blank=True, max_length=13, unique=True,
                                help_text='<a href="https://www.isbn-international.org/content/what-isbn">ISBN</a>')
-    genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
+    genre = models.ManyToManyField(Genre, related_name="books", help_text='Select a genre for this book')
 
     class Meta:
         verbose_name = "Books"
