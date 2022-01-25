@@ -3,7 +3,10 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-  <p> {{ author.first_name }}, {{ author.last_name }} </p>
+  <h3> <b>{{ author.first_name }}, {{ author.last_name }} </b> </h3>
   <p> <b> Born:</b> {{author.date_of_birth}}</p>
   <p> <b> Died:</b> {{author.date_of_death}}</p>
+  <footer>
+    <a href="{{request.META.HTTP_REFERER}}">Back</a>
+  </footer>
 {% endblock %}
