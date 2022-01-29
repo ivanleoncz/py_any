@@ -4,9 +4,12 @@
 
 {% block content %}
   <h3> <b>{{ author.first_name }}, {{ author.last_name }} </b> </h3>
-  <p> <b> Born:</b> {{author.date_of_birth}}</p>
-  <p> <b> Died:</b> {{author.date_of_death}}</p>
-  <br><h3><b>Books</b></h3>
+  <ul>
+    <li><b> Born:</b> {{author.date_of_birth}}</li>
+    <li><b> Died:</b> {{author.date_of_death}}</li>
+  </ul>
+  <br>
+  <h3><b>Books</b></h3>
   <ul>
   {% for book in books %}
     <li>{{ book.title}}</li>
