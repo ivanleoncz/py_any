@@ -40,7 +40,14 @@ class BookListView(generic.ListView):
     model = Book
     paginate_by = 5
     template_name = "library/book.html"
-    queryset = Book.objects.all().order_by('id')
+
+    def get_queryset(self):
+        book = self.request.GET.get('book')
+        if book:
+            book_list = Book.objects.all().filter(title__icontains=book)
+        else:
+            book_list = Book.objects.all().order_by('id')
+        return book_list
 
 
 class BookDetailView(generic.DetailView):

@@ -4,6 +4,10 @@
 
 {% block content %}
 
+    <form method="get" action="/apps/library/books/">
+        Search for a book: <input type="text" name="book">  <input type="submit">
+    </form>
+
     {% for book in book_list %}
         <h3><a href="{{ book.get_absolute_url }}" style="text-decoration:none"><b>{{ book.title }}</b></a> by {{ book.author }}</h3>
         <p>{{ book.summary|slice:200 }}<a href="{{ book.get_absolute_url }}">...see more</a></p>
