@@ -3,11 +3,15 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-  <h3> <b>{{ author.first_name }}, {{ author.last_name }} </b> </h3>
-  <ul>
-    <li><b> Born:</b> {{author.date_of_birth}}</li>
-    <li><b> Died:</b> {{author.date_of_death}}</li>
-  </ul>
+  {% if author.picture %}
+    <img src="{{ author.picture.url }}">
+  {% endif %}
+  <h3> <b>{{ author.first_name }}, {{ author.last_name }}</b> </h3>
+  <h4> ({{author.date_of_birth}} - {{author.date_of_death}}) </h4><br>
+  {% if author.about %}
+    <p>{{ author.about }}</p>
+  {% endif %}
+
   <br>
   <h3><b>Books</b></h3>
   <ul>
