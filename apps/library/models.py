@@ -1,12 +1,18 @@
 import uuid
 
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
+from PIL import Image
 
 
 class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    picture = models.ImageField(upload_to='library/authors/', null=True, blank=True,
+                                help_text='will be automatically convert the image to 256x256',
+                                validators=[FileExtensionValidator(['jpeg', 'jpg', 'png'])])
+    about = models.TextField(max_length=1024, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     date_of_death = models.DateField('Died', null=True, blank=True)
 
@@ -20,6 +26,14 @@ class Author(models.Model):
 
     def __str__(self):
         return f'{self.last_name}, {self.first_name}'
+
+    def save(self, *args, **kwargs):
+        if self.picture:
+            output_size = 256, 256
+            super().save(*args, **kwargs)
+            img = Image.open(self.picture.path)
+            img.thumbnail(output_size)
+            img.save(self.picture.path)
 
 
 class Genre(models.Model):

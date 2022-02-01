@@ -11,6 +11,7 @@ class BookInline(admin.TabularInline):
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('first_name', 'last_name', 'date_of_birth', 'date_of_death')
     fields = (('first_name', 'last_name',),
+              'picture', 'about',
               'date_of_birth', 'date_of_death')
 
     inlines = [BookInline]
