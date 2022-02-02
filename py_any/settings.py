@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'apps.cetes',
-    'apps.library'
+    'apps.library',
+    'apps.geotracking'
 ]
 
 MIDDLEWARE = [
