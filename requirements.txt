@@ -3,6 +3,7 @@ charset-normalizer==2.0.11
 Django==2.2.25
 django-countries==7.2.1
 django-extensions==2.2.8
+django-ipware==4.0.2
 idna==3.3
 Pillow==9.0.0
 python-dateutil==2.8.2
