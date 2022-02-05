@@ -9,7 +9,7 @@ class Visitors(models.Model):
     country = CountryField()
     city = models.CharField(max_length=64)
     amount_of_requests = models.PositiveIntegerField(default=1)
-    date = models.DateField()
+    date = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Visitors"
