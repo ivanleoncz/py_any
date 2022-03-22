@@ -4,7 +4,7 @@ from django.utils import timezone
 from ipware import get_client_ip
 import requests
 
-from .models import Visitors
+from .models import Visitor
 
 ip_database_provider = "http://ipinfo.io/"
 
@@ -41,9 +41,9 @@ class Utils:
         if is_routable:
             data = self.get_ip_data(client_ip)  # Searching for IP data
             if data:
-                visitor, created = Visitors.objects.get_or_create(ip=client_ip, country=data["country"],
-                                                                  city=data["city"], date=timezone.now())
-                if not created:  # If an entry already exists, then amount_of_requests is incremented
-                    visitor.amount_of_requests += 1
+                visitor, created = Visitor.objects.get_or_create(ip=client_ip,
+                                                                 country=data["country"], city=data["city"])
+                # If an entry already exists, then amount_of_requests is incremented (models.py save())
+                if not created:
                     visitor.save()
 
