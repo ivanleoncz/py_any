@@ -1,6 +1,6 @@
+from datetime import datetime
 import json
 
-from django.utils import timezone
 from ipware import get_client_ip
 import requests
 
@@ -39,11 +39,18 @@ class Utils:
         """
         client_ip, is_routable = get_client_ip(request)
         if is_routable:
-            data = self.get_ip_data(client_ip)  # Searching for IP data
-            if data:
-                visitor, created = Visitor.objects.get_or_create(ip=client_ip,
-                                                                 country=data["country"], city=data["city"])
-                # If an entry already exists, then amount_of_requests is incremented (models.py save())
-                if not created:
+            visitor, created = Visitor.objects.get_or_create(ip=client_ip)
+            if created:
+                # When created, the visitor data gets updated with data available
+                # via ipinfo request response data...
+                data = self.get_ip_data(client_ip)  # Searching for IP data
+                if data:
+                    visitor.country = data.get("country", "???")
+                    visitor.city = data.get("city", "???")
+                    visitor.save()
+            else:
+                # Already registered visitor get amount_of_requests incremented (see models.py)
+                # only if her/his visit wasn't today...
+                if visitor.last_request.date() != datetime.now().date():
                     visitor.save()
 
