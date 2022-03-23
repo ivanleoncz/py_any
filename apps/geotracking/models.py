@@ -6,13 +6,13 @@ from django_countries.fields import CountryField
 class Visitor(models.Model):
 
     ip = models.GenericIPAddressField()
-    country = CountryField()
-    city = models.CharField(max_length=64)
+    country = CountryField(null=True)
+    city = models.CharField(null=True, max_length=64)
     amount_of_requests = models.PositiveIntegerField(default=0)
     last_request = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name = "Visitors"
+        verbose_name = "Visitor"
         verbose_name_plural = "Visitors"
 
     def __str__(self):
