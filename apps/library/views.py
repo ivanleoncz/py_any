@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 
@@ -48,20 +49,25 @@ class AuthorDetailView(generic.View, Utils):
 class BookListView(generic.ListView, Utils):
 
     model = Book
-    paginate_by = 5
     template_name = "library/book.html"
-
-    def get_queryset(self):
-        book = self.request.GET.get('book')
-        if book:
-            book_list = Book.objects.all().filter(title__icontains=book)
-        else:
-            book_list = Book.objects.all().order_by('id')
-        return book_list
 
     def get(self, request, *args, **kwargs):
         self.store_ip_data(request)
-        return render(request, self.template_name, {"book_list": self.get_queryset()})
+        book = self.request.GET.get('book')
+        if book:
+            qs = self.get_queryset().filter(title__icontains=book)
+        else:
+            qs = self.get_queryset().order_by('title')
+        # Paginator object
+        paginator = Paginator(qs, 5)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {
+            'book_list': page_obj,  # paginator
+            'page_obj': page_obj,  #
+            'is_paginated': True,
+        }
+        return render(request, self.template_name, context)
 
 
 class BookDetailView(generic.DetailView, Utils):
