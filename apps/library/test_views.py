@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from .models import Author, Book, Genre
+from ..geotracking.utils import Utils
 from ..geotracking.models import Visitor
 
 
@@ -8,7 +9,7 @@ class LibraryViews(TestCase):
 
     # this client IP should be random, in order to avoid
     # any blocking request from ipinfo.io...
-    client_ip = "20.56.124.85"
+    client_ip = Utils.get_random_public_ip()
 
     @classmethod
     def setUpTestData(cls):

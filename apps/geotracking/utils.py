@@ -1,5 +1,7 @@
 from datetime import datetime
+from ipaddress import ip_network
 import json
+import random
 
 from ipware import get_client_ip
 import requests
@@ -11,7 +13,8 @@ ip_database_provider = "http://ipinfo.io/"
 
 class Utils:
 
-    def get_ip_data(self, ip_address: str) -> dict:
+    @staticmethod
+    def get_ip_data(ip_address: str) -> dict:
         """
         Searches and obtains IP metadata.
 
@@ -54,3 +57,14 @@ class Utils:
                 if visitor.last_request.date() != datetime.now().date():
                     visitor.save()
 
+    @staticmethod
+    def get_random_public_ip() -> str:
+        """
+        Returns a random public/global IPv4 address from a short list of IPs.
+        """
+        random.seed(random.randint(0, 1000))
+        random_ips = list(ip_network('123.25.44.0/28').hosts())
+        random_ips += list(ip_network('25.1.4.128/28').hosts())
+        random_ips += list(ip_network('13.250.24.0/28').hosts())
+        random_ips += list(ip_network('78.21.94.128/28').hosts())
+        return random.choice(random_ips).__str__()
