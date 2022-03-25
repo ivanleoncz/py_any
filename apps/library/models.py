@@ -20,6 +20,12 @@ class Author(models.Model):
         verbose_name = "Authors"
         verbose_name_plural = "Authors"
         ordering = ['last_name', 'first_name']
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(date_of_death__gt=models.F('date_of_birth')),
+                name='check_date_of_death',
+            ),
+        ]
 
     def get_absolute_url(self):
         return reverse('authors-detail', args=[str(self.id)])
@@ -34,7 +40,7 @@ class Author(models.Model):
             img = Image.open(self.picture.path)
             img.thumbnail(output_size)
             img.save(self.picture.path)
-        super().save(*args, **kwargs)
+        super().save(   *args, **kwargs)
 
 
 class Genre(models.Model):
