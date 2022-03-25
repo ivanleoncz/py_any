@@ -40,7 +40,7 @@ class Author(models.Model):
             img = Image.open(self.picture.path)
             img.thumbnail(output_size)
             img.save(self.picture.path)
-        super().save(   *args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class Genre(models.Model):
