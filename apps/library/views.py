@@ -4,6 +4,7 @@ from django.views import generic
 
 from .models import Author, Book, Genre
 from apps.geotracking.utils import Utils
+from py_any.settings import PAGINATOR_PAGE_LENGTH
 
 
 class LibraryView(generic.View, Utils):
@@ -55,12 +56,14 @@ class BookListView(generic.ListView, Utils):
         self.store_ip_data(request)
         book = self.request.GET.get('book')
         if book:
-            qs = self.get_queryset().filter(title__icontains=book)
+            qs = self.get_queryset().filter(title__icontains=book).order_by('title')
         else:
             qs = self.get_queryset().order_by('title')
         # Paginator object
-        paginator = Paginator(qs, 5)
+        paginator = Paginator(qs, PAGINATOR_PAGE_LENGTH)
         page_number = self.request.GET.get('page')
+        if page_number and int(page_number) > paginator.num_pages:
+            return render(request, self.template_name, status=404)
         page_obj = paginator.get_page(page_number)
         context = {
             'book_list': page_obj,  # paginator
