@@ -22,6 +22,8 @@ class LibraryViews(TestCase):
             book = Book.objects.create(title=f"book_{i}", author=author)
             book.genre.add(genre_1)
             book.genre.add(genre_2)
+            book.genre.add(genre_3)
+            book.genre.add(genre_4)
 
     def test_get_authors(self):
         response = self.client.get(f'/apps/library/authors/')
