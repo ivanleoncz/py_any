@@ -3,26 +3,37 @@
 {% block title %} Library - Author {% endblock %}
 
 {% block content %}
-  {% if author.picture %}
+  <br><br>
+<div class="container">
+
+  <div class="col-sm-4" style="padding-left: 20px;">
+    {% if author.picture %}
     <img src="{{ author.picture.url }}">
-  {% endif %}
-  <h3> <b>{{ author.first_name }}, {{ author.last_name }}</b> </h3>
-  <h4> ({{author.date_of_birth}} - {{author.date_of_death}}) </h4><br>
-  {% if author.about %}
+    {% endif %}
+    <h3> <b>{{ author.first_name }}, {{ author.last_name }}</b> </h3>
+    <h4> ({{author.date_of_birth}} - {{author.date_of_death}}) </h4><br>
+    <h3><b>Books</b></h3>
+    <ul>
+    {% for book in books %}
+      <li>{{ book.title}}</li>
+    {% empty %}
+      <p>This author has no books...</p>
+    {% endfor %}
+    </ul>
+  </div>
+
+  <div class="col-sm-4" style="padding-right: 40px;">
+    {% if author.about %}
     <p>{{ author.about }}</p>
-  {% endif %}
+    {% endif %}
+  </div>
 
-  <br>
-  <h3><b>Books</b></h3>
-  <ul>
-  {% for book in books %}
-    <li>{{ book.title}}</li>
-  {% empty %}
-    <p>This author has no books...</p>
-  {% endfor %}
-  </ul>
+</div>
 
-  <br><footer>
-    <a href="{{request.META.HTTP_REFERER}}">Back</a>
-  </footer>
+<br><br>
+<footer>
+  <a href="{{request.META.HTTP_REFERER}}">Back</a>
+</footer>
+<br><br>
+
 {% endblock %}
