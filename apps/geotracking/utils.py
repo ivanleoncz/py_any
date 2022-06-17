@@ -52,9 +52,10 @@ class Utils:
                     visitor.city = data.get("city", "???")
                     visitor.save()
             else:
-                # Already registered visitor get amount_of_requests incremented (see models.py)
-                # only if her/his visit wasn't today...
+                # A new visit in a day from an already registered visitor (IP address), represents an increment
+                # of amount_of_requests. No matter how many visits she/he performs in a day, it's one counted visit.
                 if visitor.last_request.date() != datetime.now().date():
+                    visitor.amount_of_requests += 1
                     visitor.save()
 
     @staticmethod
