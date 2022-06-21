@@ -1,8 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from ipaddress import ip_network
 import json
 import random
 
+from django.conf import settings
 from ipware import get_client_ip
 import requests
 
@@ -50,6 +51,7 @@ class Utils:
                 if data:
                     visitor.country = data.get("country", "???")
                     visitor.city = data.get("city", "???")
+                    visitor.amount_of_requests = 1
                     visitor.save()
             else:
                 # A new visit in a day from an already registered visitor (IP address), represents an increment
@@ -69,3 +71,28 @@ class Utils:
         random_ips += list(ip_network('13.250.24.0/28').hosts())
         random_ips += list(ip_network('78.21.94.128/28').hosts())
         return random.choice(random_ips).__str__()
+
+    @staticmethod
+    def set_cookie(response, key: str, value, expire_in: int = None) -> str:
+        """
+        Sets a cookie on Django's response object and its expiry time.
+        If expire_in is not provided, a default value is calculated for
+            setting the cookie expiration to midnight (00:00:00) UTC,
+            through the following formula:
+            (Remaining Hours as Minutes + Remaining Minutes) as Seconds - Remaining Seconds
+
+        :param response: response object from Django
+        :param key: cookie name
+        :param value: cookie value
+        :param expire_in: cookie max age in secs
+
+        :return: response object with the defined cookie and its expiration
+        """
+        if expire_in:
+            max_age = expire_in
+        else:
+            ts = datetime.utcnow()
+            max_age = (((23 - ts.hour) * 60) + (60 - ts.minute)) * 60 - ts.second
+        response.set_cookie(key, value, max_age=max_age, domain=settings.SESSION_COOKIE_DOMAIN,
+                            secure=settings.SESSION_COOKIE_SECURE or None)
+        return response
