@@ -17,4 +17,4 @@ class Visitor(models.Model):
 
     def __str__(self):
         return f"{self.ip} from {self.country.name} ({self.city}): " \
-               f"{self.amount_of_requests} requests (last was {self.last_request}"
+               f"{self.amount_of_requests} requests (last was {self.last_request})"
