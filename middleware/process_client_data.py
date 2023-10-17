@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from secrets import token_hex
+
 from apps.geotracking.utils import Utils
 
 
@@ -16,9 +18,11 @@ class ProcessClientDataMiddleware(Utils):
          - IP info is obtained (if routable) and stored in the database
         """
         response = self.get_response(request)
-        if 'visited_today' not in request.COOKIES:
+        if 'device_id' not in request.COOKIES:
             # TODO: we need to track referers => request.META.get('HTTP_REFERER')
-            self.store_ip_data(request)
-            response = self.set_cookie(response, 'visited_today', True)
+            response = self.set_cookie(response, key='device_id', value=token_hex(16))
+        else:
+            # IP address is stored upon a new visit (legitimate user?)
+            self.register_visitor(request)
         return response
 
