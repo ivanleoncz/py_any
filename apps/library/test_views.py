@@ -1,9 +1,9 @@
+from django.conf import settings
 from django.test import TestCase
 
 from .models import Author, Book, Genre
 from ..geotracking.utils import Utils
 from ..geotracking.models import Visitor
-from py_any.settings import PAGINATOR_PAGE_LENGTH
 
 
 class LibraryViews(TestCase):
@@ -58,17 +58,17 @@ class LibraryViews(TestCase):
 
         # Check basic request response.
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context["book_list"])
+        self.assertTrue(response.context["books"])
 
         # Check context query length with pagination applies.
-        self.assertEqual(len(response.context["book_list"]), PAGINATOR_PAGE_LENGTH)
+        self.assertEqual(len(response.context["books"]), settings.PAGINATOR_PAGE_LENGTH)
 
         # Check page QS parameter.
         response = self.client.get('/apps/library/books/', {'page': '2'})
         self.assertEqual(response.status_code, 200)
 
         # Check page QS parameter with an invalid page number, for there are just 10 books...
-        if PAGINATOR_PAGE_LENGTH == 5:
+        if settings.PAGINATOR_PAGE_LENGTH == 5:
             response = self.client.get('/apps/library/books/', {'page': '3'})
             self.assertEqual(response.status_code, 404)
 
@@ -77,7 +77,7 @@ class LibraryViews(TestCase):
         Book.objects.filter(id=2).update(title="The Great Mongol Army")
         response = self.client.get(f'/apps/library/books/', {'book': 'Arm'})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.context["book_list"]), 2)
+        self.assertEqual(len(response.context["books"]), 2)
 
     def test_get_book(self):
         book = Book.objects.get(id=1)

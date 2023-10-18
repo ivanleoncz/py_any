@@ -3,7 +3,7 @@ from django.test import TestCase
 from .models import Author, Book, Genre
 
 
-class MyTest(TestCase):
+class LibraryModels(TestCase):
 
     @classmethod
     def setUpTestData(cls):
