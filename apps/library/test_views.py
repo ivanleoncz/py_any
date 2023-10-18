@@ -5,10 +5,10 @@ from ..geotracking.utils import Utils
 from ..geotracking.models import Visitor
 from py_any.settings import PAGINATOR_PAGE_LENGTH
 
+
 class LibraryViews(TestCase):
 
-    # this client IP should be random, in order to avoid
-    # any blocking request from ipinfo.io...
+    # Client IP should be random, in order to avoid any request blockers from ipinfo.io.
     client_ip = Utils.get_random_public_ip()
 
     @classmethod
@@ -41,15 +41,17 @@ class LibraryViews(TestCase):
         self.assertTrue(response.context["author"])
         self.assertTrue(response.context["books"])
 
-        # Checking if visitor's IP address was recorded on db...
-        visitor = Visitor.objects.filter(ip=LibraryViews.client_ip)
-        self.assertTrue(visitor)
-        self.assertEqual(visitor[0].ip, str(LibraryViews.client_ip))
+        response = self.client.get(f'/apps/library/authors/{author.id}/')
 
-        # Checking if Visitor.amount_of_requests was incremented after 2nd request.
+        # Checking if visitor's IP address was recorded on db...
+        visitor = Visitor.objects.filter(ip_address=LibraryViews.client_ip)
+        self.assertTrue(visitor)
+        self.assertEqual(visitor[0].ip_address, str(LibraryViews.client_ip))
+
+        # Checking if Visitor.days_visited was incremented after 2nd request.
         self.client.get(f'/apps/library/authors/{author.id}/')
         visitor[0].refresh_from_db()
-        self.assertEqual(visitor[0].amount_of_requests, 2)
+        self.assertEqual(first=visitor[0].days_visited, second=1)
 
     def test_get_books(self):
         response = self.client.get(f'/apps/library/books/')
