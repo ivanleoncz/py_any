@@ -4,10 +4,10 @@ from .models import Visitor
 
 
 class VisitorAdmin(admin.ModelAdmin):
-    list_display = ['ip', 'country', 'city', 'amount_of_requests', 'last_request']
+    list_display = ['device_id', 'ip_address', 'country', 'city', 'days_visited', 'created', 'updated']
     list_filter = 'country',
     search_fields = ['country', 'city']
-    date_hierarchy = 'last_request'
+    date_hierarchy = 'updated'
     empty_value_display = '-empty-'
 
 
