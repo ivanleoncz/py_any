@@ -1,13 +1,12 @@
+from django.conf import settings
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.views import generic
 
 from .models import Author, Book, Genre
-from apps.geotracking.utils import Utils
-from py_any.settings import PAGINATOR_PAGE_LENGTH
 
 
-class LibraryView(generic.View, Utils):
+class LibraryView(generic.View):
 
     template_name = "library/library.html"
 
@@ -17,27 +16,24 @@ class LibraryView(generic.View, Utils):
             'authors': Author.objects.all().count(),
             'genres': Genre.objects.all().count()
         }
-        self.store_ip_data(request)
         return render(request, self.template_name, context)
 
 
-class AuthorListView(generic.ListView, Utils):
+class AuthorListView(generic.ListView):
 
-    model = Author
     template_name = "library/author.html"
+    model = Author
     queryset = Author.objects.all().order_by('id')
 
     def get(self, request, *args, **kwargs):
-        self.store_ip_data(request)
         return render(request, self.template_name, {"author_list": self.queryset})
 
 
-class AuthorDetailView(generic.View, Utils):
+class AuthorDetailView(generic.View):
 
     template_name = "library/author_detail.html"
 
     def get(self, request, *args, **kwargs):
-        self.store_ip_data(request)
         author = get_object_or_404(Author, pk=self.kwargs["pk"])
         books = author.books.all()
         context = {
@@ -47,39 +43,40 @@ class AuthorDetailView(generic.View, Utils):
         return render(request, self.template_name, context)
 
 
-class BookListView(generic.ListView, Utils):
+class BookListView(generic.ListView):
 
-    model = Book
     template_name = "library/book.html"
+    model = Book
 
-    def get(self, request, *args, **kwargs):
-        self.store_ip_data(request)
+    def get_queryset(self):
         book = self.request.GET.get('book')
         if book:
-            qs = self.get_queryset().filter(title__icontains=book).order_by('title')
+            queryset = Book.objects.filter(title__icontains=book).order_by('title')
         else:
-            qs = self.get_queryset().order_by('title')
-        # Paginator object
-        paginator = Paginator(qs, PAGINATOR_PAGE_LENGTH)
-        page_number = self.request.GET.get('page')
+            queryset = Book.objects.order_by('title')
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        page_number = self.request.GET.get('page')  # Provided by base template via page navigation.
+        paginator = Paginator(self.get_queryset(), settings.PAGINATOR_PAGE_LENGTH)
         if page_number and int(page_number) > paginator.num_pages:
             return render(request, self.template_name, status=404)
-        page_obj = paginator.get_page(page_number)
+
+        page = paginator.get_page(page_number)
         context = {
-            'book_list': page_obj,  # paginator
-            'page_obj': page_obj,  #
+            'books': page.object_list,
+            'page_obj': page,
             'is_paginated': True,
         }
         return render(request, self.template_name, context)
 
 
-class BookDetailView(generic.DetailView, Utils):
+class BookDetailView(generic.DetailView):
 
-    model = Book
     template_name = "library/book_detail.html"
+    model = Book
 
     def get(self, request, *args, **kwargs):
-        self.store_ip_data(request)
         book = get_object_or_404(Book, pk=self.kwargs["pk"])
         return render(request, self.template_name, {"book": book})
 
