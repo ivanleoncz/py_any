@@ -133,3 +133,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 PAGINATOR_PAGE_LENGTH = 5
+
+# Project Configurations
+IP_DATA_PROVIDER = "http://ipinfo.io/"

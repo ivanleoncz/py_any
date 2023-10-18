@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from ipaddress import ip_network
 import json
 import random
@@ -9,61 +9,13 @@ import requests
 
 from .models import Visitor
 
-ip_database_provider = "http://ipinfo.io/"
-
 
 class Utils:
 
     @staticmethod
-    def get_ip_data(ip_address: str) -> dict:
-        """
-        Searches and obtains IP metadata.
-
-        parameters
-        ---------
-        ip_address : str
-
-        returns
-        -------
-        IP address metadata, filtered via list comprehension over JSON response as dictionary.
-        """
-        r = requests.get("".join((ip_database_provider, ip_address)))
-        # For returning more information on data dict, just add IPINFO fields on list comprehension's tuple...
-        data = {k: v for k, v in json.loads(r.content.decode()).items() if k in ('country', 'city', )}
-        return data
-
-    def store_ip_data(self, request: dict) -> None:
-        """
-        Stores the IP data at Visitors model, if any data is available via Utils.get_ip_data().
-
-        Parameters
-        ----------
-        request
-            Django default request object.
-        """
-        client_ip, is_routable = get_client_ip(request)
-        if is_routable:
-            visitor, created = Visitor.objects.get_or_create(ip=client_ip)
-            if created:
-                # When created, the visitor data gets updated with data available
-                # via ipinfo request response data...
-                data = self.get_ip_data(client_ip)  # Searching for IP data
-                if data:
-                    visitor.country = data.get("country", "???")
-                    visitor.city = data.get("city", "???")
-                    visitor.amount_of_requests = 1
-                    visitor.save()
-            else:
-                # A new visit in a day from an already registered visitor (IP address), represents an increment
-                # of amount_of_requests. No matter how many visits she/he performs in a day, it's one counted visit.
-                if visitor.last_request.date() != datetime.now().date():
-                    visitor.amount_of_requests += 1
-                    visitor.save()
-
-    @staticmethod
     def get_random_public_ip() -> str:
         """
-        Returns a random public/global IPv4 address from a short list of IPs.
+        Returns a random public/global IPv4 address from a short list of IPs. Used for testing purposes.
         """
         random.seed(random.randint(0, 1000))
         random_ips = list(ip_network('123.25.44.0/28').hosts())
@@ -73,20 +25,66 @@ class Utils:
         return random.choice(random_ips).__str__()
 
     @staticmethod
+    def get_ip_data(ip_address: str) -> dict:
+        """
+        Searches and obtains IP metadata.
+
+        In order to obtain other response data for an IP address, referrer to this document and adjust 'fields' tuple:
+        - https://ipinfo.io/developers/responses#full-response
+
+        returns
+        -------
+        IP address metadata
+        """
+        fields = ('country', 'city', )
+        response = requests.get("".join((settings.IP_DATA_PROVIDER, ip_address)))
+        return {k: v for k, v in json.loads(response.content.decode()).items() if k in fields}
+
+    def register_visitor(self, request: dict) -> None:
+        """
+        Stores visitor and its metadata ('device_id' cookie, ip, referrer, etc.).
+
+        Parameters
+        ----------
+        request
+            Django request object.
+        """
+        client_ip, is_routable = get_client_ip(request)
+        if is_routable:
+            visitor, created = Visitor.objects.get_or_create(device_id=request.COOKIES["device_id"],
+                                                             defaults={"ip_address": client_ip,
+                                                                       "referrer": request.META.get('HTTP_REFERER')})
+            if created:
+                data = self.get_ip_data(client_ip)
+                if data:
+                    visitor.country = data.get("country", "???")
+                    visitor.city = data.get("city", "???")
+                    visitor.days_visited = 1
+                    visitor.save()
+            else:
+                if visitor.updated.date() != datetime.now().date():
+                    # Once visitor.updated is equal today, then no more increment is performed.
+                    visitor.days_visited += 1
+                    visitor.save()
+
+    @staticmethod
     def set_cookie(response, key: str, value, expire_in: int = None) -> str:
         """
         Sets a cookie on Django's response object and its expiry time.
-        If expire_in is not provided, a default value is calculated for
-            setting the cookie expiration to midnight (00:00:00) UTC,
-            through the following formula:
-            (Remaining Hours as Minutes + Remaining Minutes) as Seconds - Remaining Seconds
 
-        :param response: response object from Django
-        :param key: cookie name
-        :param value: cookie value
-        :param expire_in: cookie max age in secs
+        If expire_in is not provided, cookie max age lasts until midnight (00:00:00) UTC, through the following formula:
+            (Remaining Hours -> Minutes + Remaining Minutes) as Seconds - Remaining Seconds
 
-        :return: response object with the defined cookie and its expiration
+        Parameters
+        ----------
+        response: response object from Django
+        key: cookie name
+        value: cookie value
+        expire_in: cookie max age in secs
+
+        Returns
+        -------
+        response object with the defined cookie and its expiration
         """
         if expire_in:
             max_age = expire_in
