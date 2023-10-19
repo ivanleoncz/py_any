@@ -40,32 +40,30 @@ class Utils:
         response = requests.get("".join((settings.IP_DATA_PROVIDER, ip_address)))
         return {k: v for k, v in json.loads(response.content.decode()).items() if k in fields}
 
-    def register_visitor(self, request: dict) -> None:
+    def process_visitor(self, request: dict) -> None:
         """
-        Stores visitor and its metadata ('device_id' cookie, ip, referrer, etc.).
+        Stores visitor and its metadata (referrer, ip_address, country, city, etc.), or updates an existing one.
+
+        Country and City are only stored if client_ip is "routable".
+        Days Visited is incremented only when current date != visitor.updated, which is updated upon each obj.save().
 
         Parameters
         ----------
-        request
-            Django request object.
+        request : Django request object.
         """
-        client_ip, is_routable = get_client_ip(request)
-        if is_routable:
-            visitor, created = Visitor.objects.get_or_create(device_id=request.COOKIES["device_id"],
-                                                             defaults={"ip_address": client_ip,
-                                                                       "referrer": request.META.get('HTTP_REFERER')})
-            if created:
-                data = self.get_ip_data(client_ip)
+        ip_address, routable = get_client_ip(request)
+        visitor, created = Visitor.objects.get_or_create(device_id=request.COOKIES["device_id"],
+                                                         defaults={"ip_address": ip_address,
+                                                                   "referrer": request.META.get('HTTP_REFERER')})
+        if created:
+            if routable:
+                data = self.get_ip_data(ip_address)
                 if data:
-                    visitor.country = data.get("country", "???")
-                    visitor.city = data.get("city", "???")
-                    visitor.days_visited = 1
-                    visitor.save()
-            else:
-                if visitor.updated.date() != datetime.now().date():
-                    # Once visitor.updated is equal today, then no more increment is performed.
-                    visitor.days_visited += 1
-                    visitor.save()
+                    visitor.country, visitor.city = data.get("country", "???"), data.get("city", "???")
+            visitor.save()
+        elif visitor.updated.date() != datetime.now().date():
+            visitor.days_visited += 1
+            visitor.save()
 
     @staticmethod
     def set_cookie(response, key: str, value, expire_in: int = None) -> str:
