@@ -13,7 +13,7 @@ class Visitor(models.Model):
                                 help_text="Page which served the link to the request.")
     country = CountryField(null=True)
     city = models.CharField(null=True, max_length=64)
-    days_visited = models.PositiveIntegerField(default=0)
+    days_visited = models.PositiveIntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
