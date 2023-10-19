@@ -32,26 +32,36 @@ class LibraryViews(TestCase):
         self.assertEqual(len(response.context["author_list"]), 10)
 
     def test_get_author(self):
+        
         author = Author.objects.get(id=1)
+        url = f'/apps/library/authors/{author.id}/'
         self.client.defaults['REMOTE_ADDR'] = LibraryViews.client_ip
 
-        # Checking basic request response for an Author.
-        response = self.client.get(f'/apps/library/authors/{author.id}/')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.context["author"])
-        self.assertTrue(response.context["books"])
+        # Testing endpoint and response
+        response = self.client.get(url)
+        self.assertEqual(first=response.status_code, second=200, msg=f"the following url must be accessible: {url}")
+        self.assertTrue(response.context["author"], msg="'author' key no present on View context")
+        self.assertTrue(response.context["books"], msg="'books' key no present on View content")
 
-        response = self.client.get(f'/apps/library/authors/{author.id}/')
+        # Checking data consistency upon 1st day of visit...
+        self.assertIn(member="device_id", container=response.client.cookies, msg="cookie 'device_id' MUST BE present")
+        self.assertFalse(Visitor.objects.filter(device_id=response.client.cookies["device_id"].value),
+                         msg="Visitor MUST NOT be registered on a 1st day of visit.")
 
-        # Checking if visitor's IP address was recorded on db...
-        visitor = Visitor.objects.filter(ip_address=LibraryViews.client_ip)
-        self.assertTrue(visitor)
-        self.assertEqual(visitor[0].ip_address, str(LibraryViews.client_ip))
+        # Checking data consistency upon 2nd day of visit...
+        response = self.client.get(url)
+        visitor = Visitor.objects.filter(device_id=response.client.cookies["device_id"].value)
+        self.assertTrue(visitor, msg="Visitor MUST BE registered on a 2nd day of visit.")
+        self.assertEqual(visitor[0].device_id, response.client.cookies["device_id"].value,
+                         msg="'device_id' MUST BE present on Visitor registry")
+        self.assertEqual(visitor[0].ip_address, str(LibraryViews.client_ip),
+                         msg="'ip_address' MUST BE present on Visitor registry")
 
-        # Checking if Visitor.days_visited was incremented after 2nd request.
-        self.client.get(f'/apps/library/authors/{author.id}/')
+        # Checking data consistency upon Visitor.days_visited field...
+        self.client.get(url)
         visitor[0].refresh_from_db()
-        self.assertEqual(first=visitor[0].days_visited, second=1)
+        self.assertEqual(first=visitor[0].days_visited, second=1,
+                         msg="Visitor.days_visited MUST NOT be incremented with a visit on a same day.")
 
     def test_get_books(self):
         response = self.client.get(f'/apps/library/books/')
