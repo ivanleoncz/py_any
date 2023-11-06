@@ -1,6 +1,6 @@
 # PythonAnywhere
 
-[Action](https://github.com/ivanleoncz/python_anywhere/actions/workflows/tests.yml/badge.svg)
+![Action](https://github.com/ivanleoncz/python_anywhere/actions/workflows/tests.yml/badge.svg)
 
 Website written in Django and its template enginepy for hosting small projects.
 
