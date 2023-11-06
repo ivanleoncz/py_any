@@ -1,2 +1,2 @@
-# py_any
-Small applications via Python Anywhere.
+# PythonAnywhere
+Website written in Django for hosting small projects.
