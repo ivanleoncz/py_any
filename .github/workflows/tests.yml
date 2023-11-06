@@ -1,4 +1,4 @@
-name: Test Django Apps
+name: Tests
 on: [pull_request, push]
 jobs:
   test_project:
