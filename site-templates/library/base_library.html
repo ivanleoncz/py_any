@@ -1,61 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- Latest compiled and minified CSS -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-            crossorigin="anonymous">
-
-      <!-- Optional theme -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-            integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-            crossorigin="anonymous">
-
-      <title>{% block title %} {% endblock %}</title>
-      <style type="text/css">
-        html {
-            overflow-y: scroll;
-        }
-        li {
-            font-size: 20px;
-        }
-        p {
-            font-size: 18px;
-            line-height: 150%;
-        }
-        #content-frame {
-            padding-left: 30px;
-            background: #f2f2f2;
-        }
-        img {
-            height: 45%;
-            width: 50%;
-        }
-
-        #home_library {
-            height: 30%;
-            width: 35%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        footer {
-            margin-left: 30px;
-            position:absolute;
-            bottom:0;
-            width:50%;
-            height:80px;   /* Height of the footer */
-        }
-      </style>
-  </head>
-
   <body>
     <div class="container">
       <div class="page-header">
-        <h1><b>Library</b></h1>
+        <h1><b>Library (a modest one)</b></h1>
       </div>
       <div class="col-sm-2">
         {% block sidebar %}
@@ -97,4 +45,22 @@
         <p style="font-size: 16px;">All rights reserved.
     </footer>
   </body>
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- Latest compiled and minified CSS -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous">
+
+      <!-- Optional theme -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+            integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+            crossorigin="anonymous">
+
+      <title>{% block title %} {% endblock %}</title>
+      {% load static %}
+      <link rel="stylesheet" href="{% static 'library/style.css' %}">
+  </head>
 </html>

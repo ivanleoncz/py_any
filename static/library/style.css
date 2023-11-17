@@ -1,0 +1,39 @@
+html {
+    overflow-y: scroll;
+}
+
+body {
+    font-family: "Georgia";
+}
+
+li {
+    font-size: 20px;
+}
+p {
+    font-size: 18px;
+    line-height: 150%;
+}
+#content-frame {
+    padding-left: 30px;
+    background: #f2f2f2;
+}
+img {
+    height: 45%;
+    width: 50%;
+}
+
+#home_library {
+    height: 30%;
+    width: 35%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+footer {
+    margin-left: 30px;
+    position:absolute;
+    bottom:0;
+    width:50%;
+    height:80px;   /* Height of the footer */
+}
